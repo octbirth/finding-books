@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JQUERY TEST</title>
+</head>
+
+<body>
+    <h1>Find Books</h1>
+    <input id="bookname" type="text">
+    <button id="search">search</button>
+
+    <p></p>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            const searchBtn = document.querySelector("#search")
+            searchBtn.addEventListener("click", handler)
+
+            function handler(event) {
+                event.target.removeEventListener(event.type, arguments.callee);
+                $.ajax({
+                        method: "GET",
+                        url: "https://dapi.kakao.com/v3/search/book?target=title",
+                        data: {
+                            query: $("#bookname").val()
+                        },
+                        headers: {
+                            Authorization: "KakaoAK 51efed98f653f3c9e571eff1c466c150"
+                        }
+                    })
+
+                    .done(function (msg) {
+                        console.log(msg.documents[0].title)
+                        console.log(msg.documents[0].thumbnail)
+                        $("p").append("<strong>" + msg.documents[0].title + "</strong>");
+                        $("p").append("<img src='" + msg.documents[0].thumbnail + "'>");
+                    });
+            }
+        });
+    </script>
+
+</body>
+
+</html>
